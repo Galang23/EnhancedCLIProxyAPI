@@ -170,6 +170,7 @@ func (e *CodexExecutor) Execute(ctx context.Context, auth *cliproxyauth.Auth, re
 
 		if detail, ok := parseCodexUsage(line); ok {
 			reporter.publish(ctx, detail)
+			reporter.ensurePublished(ctx)
 		}
 
 		var param any
@@ -293,6 +294,7 @@ func (e *CodexExecutor) ExecuteStream(ctx context.Context, auth *cliproxyauth.Au
 				out <- cliproxyexecutor.StreamChunk{Payload: []byte(chunks[i])}
 			}
 		}
+		reporter.ensurePublished(ctx)
 		if errScan := scanner.Err(); errScan != nil {
 			recordAPIResponseError(ctx, e.cfg, errScan)
 			reporter.publishFailure(ctx)
